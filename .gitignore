@@ -1,5 +1,5 @@
-audio/all/
-js/jquery-1.7.1.min.js
-js/nicoaudio.js
+public/audio/all/
+audio/
+public/js/jquery-1.7.1.min.js
 index.html
 class/nicosecret.rb

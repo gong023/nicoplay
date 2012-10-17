@@ -8,8 +8,10 @@ class App < Sinatra::Base
   set :server, "webrick"
 
   get '/nicoplay/' do
+    @to_date   = Date::today
+    @from_date = @to_date - 1
     @ranking = {}
-    NicoRankingWWW.new.getRankingByinterval(nil, nil).each do |ret|
+    NicoRankingWWW.new.getRankingByinterval(@from_date, @to_date).each do |ret|
       @ranking.store(ret['video_id'], ret['title'])
     end
     haml :rank

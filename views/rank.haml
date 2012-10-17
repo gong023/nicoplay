@@ -2,9 +2,12 @@
 !!! Strict
 %html
   %head
-    %script{:type => "text/javascript",  :charset => "utf-8"}
-    %script{:type => "text/javascript",  :src => "js/jquery-1.7.1.min.js"}
-    %script{:type => "text/javascript",  :src => "js/nicoaudio.js"}
+    %meta{:'http-equiv' => "Content-Type", :content => "text/html", :charset => "utf-8"}
+    %script{:type => 'text/javascript', :src => "/js/jquery-1.7.1.min.js"}
+    %script{:type => 'text/javascript', :src => "/js/nicoaudio.js"}
   %body
+    %input{:type => 'hidden', :id => 'to_date', :value => @to_date, :name => 'to_date'}
     - @ranking.each do |video_id, title|
       %p= title
+      %input{:type => 'button', :value => "play", :onclick => "nicoaudio.play('#{@to_date}', '#{title}');"}
+      %input{:type => 'button', :value => "play", :onclick => "nicoaudio.pause();"}
