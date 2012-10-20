@@ -7,6 +7,7 @@ require 'json'
 class App < Sinatra::Base
   register Sinatra::Reloader
   set :server, "webrick"
+  set :haml, :format => :html5
 
   get '/nicoplay/' do
     @to_date   = Date::today
