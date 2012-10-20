@@ -1,4 +1,4 @@
-var nicoplayer = function(){
+var NicoPlayer = function(){
   var current_audio = null;
   var domain = 'http://gong023.com/nicoplay/'
   return {
@@ -8,26 +8,60 @@ var nicoplayer = function(){
         alert('browser does not support');
       }
       current_audio.autoplay = false;
-    },
-    'play' :function(date, title) {
-      if (current_audio === null) {
-        alert('audio is not found');
-      }
-      current_audio.src = domain + "audio/all/" + date + "/" + title + ".mp4.mp3";
-      //current_audio.src = 'http://gong023.com/nicoplay/public/audio/all/2012-09-23/freedom.mp3';
       current_audio.controls = true;
-      console.log(current_audio);
+      current_audio.addEventListener('ended', this.playNext);
+    },
+    'play' :function(ctime, video_id, current_playing) {
+      if (current_audio === null) {
+        alert('audio is not foud');
+      }
+      date = nicoutil.parseDate(ctime);
+      current_audio.src = domain + "public/audio/all/" + date + "/" + video_id + ".mp3";
       current_audio.play();
+      playlist.init(current_playing);//やだ
     },
     'pause' :function() {
       if (current_audio === null) {
         alert('audio is not found');
       }
       current_audio.pause();
+    },
+    'playNext' :function() {
+      var next = playlist.next();
+      this.play(next.ctime, next.video_id, playlist.getIndex());
     }
   };
 };
+var NicoPlaylist = function(){
+  var list;
+  var index;
+  return {
+    'init' :function(current_playing) {
+      list = JSON.parse(document.player.playlist.value);
+      index = current_playing;
+    },
+    'getIndex' :function(){
+      return index;
+    },
+    'next' :function() {
+      var list_length = 0;
+      for (var name in list) list_length++;
+      if (index >= list_length - 1) {
+        index = 0;
+        return list[0];
+      }
+      index++;
+      return list[index];
+    }
+  };
+};
+var nicoutil = {
+  'parseDate' :function(date) {
+    return date.match(/^[0-9]+-[0-9]+-[0-9]+/);
+  }
+};
 (function() {
-  nicoaudio = nicoplayer();
-  nicoaudio.init();
+  audio = NicoPlayer();
+  audio.init();
+  playlist = NicoPlaylist();  
 })();

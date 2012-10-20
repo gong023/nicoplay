@@ -6,8 +6,10 @@
     %script{:type => 'text/javascript', :src => "/js/jquery-1.7.1.min.js"}
     %script{:type => 'text/javascript', :src => "/js/nicoaudio.js"}
   %body
-    %input{:type => 'hidden', :id => 'to_date', :value => @to_date, :name => 'to_date'}
-    - @ranking.each do |video_id, title|
-      %p= title
-      %input{:type => 'button', :value => "play", :onclick => "nicoaudio.play('#{@to_date}', '#{title}');"}
-      %input{:type => 'button', :value => "play", :onclick => "nicoaudio.pause();"}
+    %form{:name => 'player'}
+      - @ranking.each do |i, rank|
+        %p= rank['title']
+        %h5= rank['ctime']
+        %input{:type => 'button', :value => "play", :onclick => "audio.play(\'#{rank['ctime']}\', \'#{rank['video_id']}\', \'#{i}\');"}
+        %input{:type => 'button', :value => "pause", :onclick => "audio.pause();"}
+      %input{:type => 'hidden', :name => 'playlist', :value => "#{@ranking.to_json}"}
