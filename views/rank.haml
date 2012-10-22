@@ -7,16 +7,22 @@
     %script{:type => 'text/javascript', :src => "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"}
     %script{:type => 'text/javascript', :src => "/js/nicoaudio.js"}
   %body
-    %div{:'data-role' => 'page', :id => 'page1'}
+    %div{:'data-role' => 'page', :id => 'playlist'}
       %div{:'data-role' => 'content'}
+        %form{:name => 'player'}
+          %input{:type => 'hidden', :name => 'playlist', :value => "#{@ranking.to_json}"}
         %ul{:'data-role' => 'listview', :'data-inset' => 'true'}
           - @ranking.each do |i, rank|
             %li
-              %a{:href => '#', :onclick => |
+              %a{:href => '#pre_player', :'data-transition' => 'slide', :onclick => |
               "audio.play(\'#{rank['ctime']}\', \'#{rank['video_id']}\', \'#{i}\');"}= rank['title'] |
       %a{:href=> "#page2"}go page2
-    %div{:'data-role' => 'page', :id => 'page2'}
-      %form{:name => 'player'}
-        %input{:type => 'hidden', :name => 'playlist', :value => "#{@ranking.to_json}"}
-        %input{:type => 'button', :value => "pause", :onclick => "audio.pause();"}
-      %a{:href=> "#page1"}go page1
+    %div{:'data-role' => 'page', :id => 'pre_player'}
+      %a{:href=> "#playlist", :'data-transition' => 'slide', :'data-direction' => 'reverse'}go playlist
+      %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
+      :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
+    -# pre_playerと行き来する
+    %div{:'data-role' => 'page', :id => 'post_player'}
+      %a{:href=> "#playlist", :'data-transition' => 'slide', :'data-direction' => 'reverse'}go playlist
+      -# %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
+      -# :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
