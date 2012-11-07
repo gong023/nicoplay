@@ -11,7 +11,7 @@ class App < Sinatra::Base
 
   get '/nicoplay/' do
     @to_date   = Date::today
-    @from_date = @to_date - 2
+    @from_date = @to_date - 7
     @ranking = {}
     NicoRankingWWW.new.getRankingByinterval(@from_date, @to_date).each_with_index do |ret, i|
       #TODO:保存ディレクトリが一日遅れるバグ？暫定対処

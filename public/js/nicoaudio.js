@@ -1,27 +1,35 @@
 var NicoPlayer = function(){
   var current_audio = null;
-  var domain = 'http://gong023.com/nicoplay/'
+  var domain = 'http://gong023.com/nicoplay/';
+  var pre = true;
   return {
-    'init' :function() {
+    'init' :function(index) {
       current_audio = new Audio("");
       if (! current_audio.canPlayType) {
         alert('browser does not support');
       }
+      $.mobile.defaultPageTransition = 'slide';
       current_audio.autoplay = false;
       current_audio.controls = true;
       current_audio.addEventListener('ended', this.playNext);
+      playlist.init(index);
+      var playing = playlist.getPlaying();
+      document.getElementById("pre_title").innerHTML = playing.title;
+      $.mobile.changePage('#pre', 'slide', true, true);
+      this.play();
     },
-    'play' :function(ctime, video_id, current_playing) {
+    'getSrc' :function() {
+      var playing = playlist.getPlaying();
+      var date = nicoutil.parseDate(playing.ctime);
+      return domain + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
+    },
+    'play' :function() {
       if (current_audio === null) {
         alert('audio is not foud');
       }
-      location.href = "#pre_player";
-      var date = nicoutil.parseDate(ctime);
-      current_audio.src = domain + "public/audio/all/" + date + "/" + video_id + ".mp3";
+      current_audio.src = this.getSrc();
       //current_audio.src = "http://taira-komori.jpn.org/sound/gamesf01/Surprise1.mp3";
-      console.log(current_audio.src);
       current_audio.play();
-      playlist.init(current_playing);//やだ
     },
     'pause' :function() {
       if (current_audio === null) {
@@ -31,9 +39,17 @@ var NicoPlayer = function(){
       current_audio.pause();
     },
     'playNext' :function() {
-      location.href = "#post_player";
       var next = playlist.next();
-      audio.play(next.ctime, next.video_id, playlist.getIndex());
+      if (pre == true) {
+        document.getElementById("post_title").innerHTML = next.title;
+        $.mobile.changePage('#post', 'slide', true, true);
+        pre = false;
+      } else {
+        document.getElementById("pre_title").innerHTML = next.title;
+        $.mobile.changePage('#pre', 'slide', true, true);
+        pre = true;
+      }
+      audio.play();
     }
   };
 };
@@ -45,8 +61,8 @@ var NicoPlaylist = function(){
       list = JSON.parse(document.player.playlist.value);
       index = current_playing;
     },
-    'getIndex' :function(){
-      return index;
+    'getPlaying' :function(){
+      return list[index];
     },
     'next' :function() {
       var list_length = 0;
@@ -67,6 +83,5 @@ var nicoutil = {
 };
 (function() {
   audio = NicoPlayer();
-  audio.init();
   playlist = NicoPlaylist();  
 })();

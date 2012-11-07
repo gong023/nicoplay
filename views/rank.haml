@@ -6,7 +6,7 @@
     %script{:type => 'text/javascript', :src => "/js/jquery-1.7.1.min.js"}
     %script{:type => 'text/javascript', :src => "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"}
     %script{:type => 'text/javascript', :src => "/js/nicoaudio.js"}
-  %body
+  %body{:class => 'ui-mobile-viewport ui-overlay-c'}
     %div{:'data-role' => 'page', :id => 'playlist'}
       %div{:'data-role' => 'content'}
         %form{:name => 'player'}
@@ -15,14 +15,13 @@
           - @ranking.each do |i, rank|
             %li
               %a{:href => '#pre_player', :'data-transition' => 'slide', :onclick => |
-              "audio.play(\'#{rank['ctime']}\', \'#{rank['video_id']}\', \'#{i}\');"}= rank['title'] |
-      %a{:href=> "#page2"}go page2
-    %div{:'data-role' => 'page', :id => 'pre_player'}
-      %a{:href=> "#playlist", :'data-transition' => 'slide', :'data-direction' => 'reverse'}go playlist
+              "audio.init(\'#{i}\');"}= rank['title'] |
+    %div{:'data-role' => 'page', :id => 'pre'}
+      %p{:id => 'pre_title'}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
-    -# pre_playerと行き来する
-    %div{:'data-role' => 'page', :id => 'post_player'}
-      %a{:href=> "#playlist", :'data-transition' => 'slide', :'data-direction' => 'reverse'}go playlist
-      -# %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      -# :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
+    -# preと行き来する
+    %div{:'data-role' => 'page', :id => 'post'}
+      %p{:id => 'post_title'}
+      %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
+      :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
