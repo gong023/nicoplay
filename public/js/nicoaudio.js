@@ -12,14 +12,14 @@ var NicoPlayer = function(){
       current_audio.autoplay = false;
       current_audio.controls = true;
       current_audio.addEventListener('ended', this.playNext);
-      playlist.init(index);
-      var playing = playlist.getPlaying();
+      Playlist.init(index);
+      var playing = Playlist.getPlaying();
       document.getElementById("pre_title").innerHTML = playing.title;
       $.mobile.changePage('#pre', 'slide', true, true);
       this.play();
     },
     'getSrc' :function() {
-      var playing = playlist.getPlaying();
+      var playing = Playlist.getPlaying();
       var date = nicoutil.parseDate(playing.ctime);
       return domain + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
     },
@@ -39,7 +39,7 @@ var NicoPlayer = function(){
       current_audio.pause();
     },
     'playNext' :function() {
-      var next = playlist.next();
+      var next = Playlist.next();
       if (pre == true) {
         document.getElementById("post_title").innerHTML = next.title;
         $.mobile.changePage('#post', 'slide', true, true);
@@ -49,7 +49,7 @@ var NicoPlayer = function(){
         $.mobile.changePage('#pre', 'slide', true, true);
         pre = true;
       }
-      audio.play();
+      Audio.play();
     }
   };
 };
@@ -82,6 +82,6 @@ var nicoutil = {
   }
 };
 (function() {
-  audio = NicoPlayer();
-  playlist = NicoPlaylist();  
+  Audio = NicoPlayer();
+  Playlist = NicoPlaylist();  
 })();
