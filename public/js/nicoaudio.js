@@ -1,7 +1,7 @@
 var NicoPlayer = function(){
   var current_audio = null;
-  var domain = 'http://gong023.com/nicoplay/';
-  var pre = true;
+  var url = 'http://gong023.com/nicoplay/';
+  var my_view = NicoView();
   return {
     'init' :function(index) {
       current_audio = new Audio("");
@@ -14,14 +14,13 @@ var NicoPlayer = function(){
       current_audio.addEventListener('ended', this.playNext);
       Playlist.init(index);
       var playing = Playlist.getPlaying();
-      document.getElementById("pre_title").innerHTML = playing.title;
-      $.mobile.changePage('#pre', 'slide', true, true);
+      my_view.togglePlayer(playing.title);
       this.play();
     },
     'getSrc' :function() {
       var playing = Playlist.getPlaying();
       var date = nicoutil.parseDate(playing.ctime);
-      return domain + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
+      return url + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
     },
     'play' :function() {
       if (current_audio === null) {
@@ -40,16 +39,8 @@ var NicoPlayer = function(){
     },
     'playNext' :function() {
       var next = Playlist.next();
-      if (pre == true) {
-        document.getElementById("post_title").innerHTML = next.title;
-        $.mobile.changePage('#post', 'slide', true, true);
-        pre = false;
-      } else {
-        document.getElementById("pre_title").innerHTML = next.title;
-        $.mobile.changePage('#pre', 'slide', true, true);
-        pre = true;
-      }
-      Audio.play();
+      my_view.togglePlayer(next.title);
+      MyAudio.play();
     }
   };
 };
@@ -76,12 +67,30 @@ var NicoPlaylist = function(){
     }
   };
 };
+var NicoView = function() {
+  var domain = 'http://gong023.com:4567/nicoplay/';
+  return {
+    'togglePlayer' :function(title) {
+      if (location.href == domain + '#pre') {
+        document.getElementById('post_title').innerHTML = title;
+        this.changeLocation("#post", "slide");
+      } else {
+        document.getElementById('pre_title').innerHTML = title;
+        this.changeLocation("#pre", "slide");
+      }
+    },
+    'changeLocation' :function(ref, animation) {
+      $.mobile.defaultPageTransition = 'slide';
+      $.mobile.changePage(ref, animation, true, true);
+    }
+  };
+}
 var nicoutil = {
   'parseDate' :function(date) {
     return date.match(/^[0-9]+-[0-9]+-[0-9]+/);
   }
 };
 (function() {
-  Audio = NicoPlayer();
+  MyAudio = NicoPlayer();
   Playlist = NicoPlaylist();  
 })();

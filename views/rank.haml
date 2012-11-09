@@ -15,13 +15,13 @@
           - @ranking.each do |i, rank|
             %li
               %a{:href => '#pre_player', :'data-transition' => 'slide', :onclick => |
-              "audio.init(\'#{i}\');"}= rank['title'] |
+              "MyAudio.init(\'#{i}\');"}= rank['title'] |
     %div{:'data-role' => 'page', :id => 'pre'}
       %p{:id => 'pre_title'}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();"} |
     -# preと行き来する
     %div{:'data-role' => 'page', :id => 'post'}
       %p{:id => 'post_title'}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "audio.pause();"} |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();"} |
