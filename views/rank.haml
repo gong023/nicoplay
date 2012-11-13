@@ -18,10 +18,14 @@
               "MyAudio.init(\'#{i}\');"}= rank['title'] |
     %div{:'data-role' => 'page', :id => 'pre'}
       %p{:id => 'pre_title'}
+      %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();"} |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
     -# preと行き来する
     %div{:'data-role' => 'page', :id => 'post'}
       %p{:id => 'post_title'}
+      %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();"} |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}

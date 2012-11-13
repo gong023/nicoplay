@@ -13,7 +13,6 @@ var NicoPlayer = function(){
       }
       $.mobile.defaultPageTransition = 'slide';
       current_audio.autoplay = false;
-      current_audio.addEventListener('ended', this.playNext);
       Playlist.init(index);
       var playing = Playlist.getPlaying(Playlist.getIndex());
       my_view.togglePlayer(playing.title);
@@ -23,10 +22,7 @@ var NicoPlayer = function(){
       }
     },
     'prepareNext' :function() {
-      console.log('preparing');
       if (do_next === false) {
-        console.log('prepared');
-        console.log(next_audio);
         return;
       }
       var next_index = nicoutil.addStrings(Playlist.getIndex(), 1);
@@ -35,7 +31,7 @@ var NicoPlayer = function(){
       do_next = false;
     },
     'getSrc' :function(index) {
-      index = index || Playlist.getIndex();
+      var index = index || Playlist.getIndex();
       var playing = Playlist.getPlaying(index);
       var date = nicoutil.parseDate(playing.ctime);
       return url + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
@@ -46,18 +42,23 @@ var NicoPlayer = function(){
       }
       if (next_audio !== null && next_audio.src == this.getSrc()) {
         current_audio = next_audio;
+        current_audio.addEventListener('ended', this.playNext);
         current_audio.play();
         return;
       }
       current_audio.src = this.getSrc();
       //current_audio.src = "http://taira-komori.jpn.org/sound/gamesf01/Surprise1.mp3";
       current_audio.play();
+      current_audio.addEventListener('ended', this.playNext);
     },
-    'pause' :function() {
+    'pause' :function(go_back) {
       if (current_audio === null) {
         alert('audio is not found');
       }
-      location.href = "#playlist";
+      var go_back = go_back || false;
+      if (go_back) {
+        location.href = "#playlist";
+      }
       current_audio.pause();
     },
     'playNext' :function() {
