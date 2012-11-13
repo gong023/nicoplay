@@ -17,14 +17,18 @@
               %a{:href => '#pre_player', :'data-transition' => 'slide', :onclick => |
               "MyAudio.init(\'#{i}\');"}= rank['title'] |
     %div{:'data-role' => 'page', :id => 'pre'}
-      %p{:id => 'pre_title'}
+      %center
+        %p{:id => 'pre_title'}
+        %div{:id => 'pre_thumbnail_area'}
       %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
     -# preと行き来する
     %div{:'data-role' => 'page', :id => 'post'}
-      %p{:id => 'post_title'}
+      %center
+        %p{:id => 'post_title'}
+        %div{:id => 'post_thumbnail_area'}
       %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |

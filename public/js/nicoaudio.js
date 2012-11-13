@@ -16,6 +16,7 @@ var NicoPlayer = function(){
       Playlist.init(index);
       var playing = Playlist.getPlaying(Playlist.getIndex());
       my_view.togglePlayer(playing.title);
+      my_view.displayThumbnail(playing.video_id);
       this.play();
       if (prepare_timer == null) {
         setInterval("MyAudio.prepareNext()", 1500);
@@ -42,11 +43,9 @@ var NicoPlayer = function(){
       }
       if (next_audio !== null && next_audio.src == this.getSrc()) {
         current_audio = next_audio;
-        current_audio.addEventListener('ended', this.playNext);
-        current_audio.play();
-        return;
+      } else {
+        current_audio.src = this.getSrc();
       }
-      current_audio.src = this.getSrc();
       //current_audio.src = "http://taira-komori.jpn.org/sound/gamesf01/Surprise1.mp3";
       current_audio.play();
       current_audio.addEventListener('ended', this.playNext);
@@ -64,6 +63,7 @@ var NicoPlayer = function(){
     'playNext' :function() {
       var next = Playlist.next();
       my_view.togglePlayer(next.title);
+      my_view.displayThumbnail(next.video_id);
       if (next_audio.src == MyAudio.getSrc()) {
         do_next = true;
       }
@@ -99,6 +99,8 @@ var NicoPlaylist = function(){
 };
 var NicoView = function() {
   var domain = 'http://gong023.com:4567/nicoplay/';
+  //var thumbnail_domain = 'http://tn-skr1.smilevideo.jp/smile?i=18267644';
+  var thumbnail_domain = 'http://tn-skr1.smilevideo.jp/smile';
   return {
     'togglePlayer' :function(title) {
       if (location.href == domain + '#pre') {
@@ -112,6 +114,29 @@ var NicoView = function() {
     'changeLocation' :function(ref, animation) {
       $.mobile.defaultPageTransition = 'slide';
       $.mobile.changePage(ref, animation, true, true);
+    },
+    'displayThumbnail' :function(video_id) {
+      var video_id = video_id.replace(/^sm/, '');
+      var thumbnail_src = thumbnail_domain + "?i=" + video_id;
+      var img = document.createElement('img');
+      img.setAttribute('src', thumbnail_src);
+      img.setAttribute('width', 260);
+      img.setAttribute('height', 200);
+      if (location.href == domain + '#pre') {
+        img.setAttribute('id', 'pre_thumbnail');
+        document.getElementById('pre_thumbnail_area').appendChild(img);
+        var remove = document.getElementById('post_thumbnail');
+        if (remove) {
+          document.getElementById('post_thumbnail_area').removeChild(remove);
+        }
+      } else {
+        img.setAttribute('id', 'post_thumbnail');
+        document.getElementById('post_thumbnail_area').appendChild(img);
+        var remove = document.getElementById('pre_thumbnail');
+        if (remove) {
+          document.getElementById('pre_thumbnail_area').removeChild(remove);
+        }
+      }
     }
   };
 }
