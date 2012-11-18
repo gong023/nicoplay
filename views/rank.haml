@@ -24,6 +24,8 @@
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
+      %input{:type => 'button', :value => "previous", :'data-transition' => 'slide', |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
     -# preと行き来する
     %div{:'data-role' => 'page', :id => 'post'}
       %center
@@ -33,3 +35,5 @@
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
+      %input{:type => 'button', :value => "previous", :'data-transition' => 'slide', |
+      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
