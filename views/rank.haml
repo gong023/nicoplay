@@ -26,6 +26,10 @@
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
       %input{:type => 'button', :value => "previous", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
+      %label{:for => "shuffle_slider"}shuffle
+      %select{:name => "slider", :id => "pre_shuffle", :'data-role' => 'slider', :onchange => "Playlist.shuffle();"}
+        %option{:value => "off"}off
+        %option{:value => "on"}on
     -# preと行き来する
     %div{:'data-role' => 'page', :id => 'post'}
       %center
@@ -37,3 +41,7 @@
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
       %input{:type => 'button', :value => "previous", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
+      %label{:for => "shuffle_slider"}shuffle
+      %select{:name => "slider", :id => "post_shuffle", :'data-role' => 'slider', :onchange => "Playlist.shuffle();"}
+        %option{:value => "off"}off
+        %option{:value => "on"}on
