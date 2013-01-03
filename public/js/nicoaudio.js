@@ -5,6 +5,12 @@ var NicoPlayer = function(){
   var do_next = true;
   var url = 'http://gong023.com/nicoplay/';
   var my_view = NicoView();
+  var getSrc = function(index) {
+    var index = index || Playlist.getIndex();
+    var playing = Playlist.getPlaying(index);
+    var date = nicoutil.parseDate(playing.ctime);
+    return url + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
+  };
   return {
     init :function(index) {
       current_audio = new Audio("");
@@ -27,7 +33,7 @@ var NicoPlayer = function(){
         return;
       }
       var next_index = nicoutil.addStrings(Playlist.getIndex(), 1);
-      var src = (this.getSrc(next_index)) ? this.getSrc(next_index) : this.getSrc(0);
+      var src = (getSrc(next_index)) ? getSrc(next_index) : getSrc(0);
       next_audio = new Audio(src);
       next_audio.autoplay = false;
       next_audio.preload = 'auto';
@@ -35,19 +41,13 @@ var NicoPlayer = function(){
       //next_audio.onloadeddata = console.log('next audio end loading:' + next_audio.src);
       do_next = false;
     },
-    getSrc :function(index) {
-      var index = index || Playlist.getIndex();
-      var playing = Playlist.getPlaying(index);
-      var date = nicoutil.parseDate(playing.ctime);
-      return url + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
-    },
     play :function() {
       do_next = true;
-      if (next_audio !== null && next_audio.src == this.getSrc()) {
+      if (next_audio !== null && next_audio.src == getSrc()) {
         current_audio = next_audio;
         next_audio = null;
       } else {
-        current_audio.src = this.getSrc();
+        current_audio.src = getSrc();
       }
       if (current_audio === null) {
         alert('audio is not foud');
