@@ -8,8 +8,9 @@ var NicoPlayer = function(){
   return {
     init :function(index) {
       current_audio = new Audio("");
-      if (! current_audio.canPlayType) {
+      if (current_audio.canPlayType('audio/mpeg') == '') {
         alert('browser does not support');
+        return;
       }
       current_audio.autoplay = false;
       Playlist.init(index);
@@ -26,10 +27,12 @@ var NicoPlayer = function(){
         return;
       }
       var next_index = nicoutil.addStrings(Playlist.getIndex(), 1);
-      var src = (this.getSrc(next_index) == false) ? this.getSrc(next_index) : this.getSrc(0);
+      var src = (this.getSrc(next_index)) ? this.getSrc(next_index) : this.getSrc(0);
       next_audio = new Audio(src);
       next_audio.autoplay = false;
       next_audio.preload = 'auto';
+      //next_audio.onloadstart = console.log('next audio start loading');
+      //next_audio.onloadeddata = console.log('next audio end loading:' + next_audio.src);
       do_next = false;
     },
     getSrc :function(index) {
@@ -39,38 +42,30 @@ var NicoPlayer = function(){
       return url + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
     },
     play :function() {
+      do_next = true;
+      if (next_audio !== null && next_audio.src == this.getSrc()) {
+        current_audio = next_audio;
+        next_audio = null;
+      } else {
+        current_audio.src = this.getSrc();
+      }
       if (current_audio === null) {
         alert('audio is not foud');
         return;
-      }
-      if (next_audio !== null && next_audio.src == this.getSrc()) {
-        current_audio = next_audio;
-      } else {
-        current_audio.src = this.getSrc();
       }
       //current_audio.src = "http://taira-komori.jpn.org/sound/gamesf01/Surprise1.mp3";
       current_audio.addEventListener('ended', this.playNext);
       current_audio.play();
     },
     pause :function(go_back) {
-      if (current_audio === null || !current_audio.canPlayType) {
-        alert('audio is not found');
-        my_view.backToPlaylist();
-        return;
-      }
-      current_audio.pause();
+      if (current_audio) current_audio.pause();
       var go_back = go_back || false;
-      if (go_back) {
-        my_view.backToPlaylist();
-      }
+      if (go_back) my_view.backToPlaylist();
     },
     playNext :function() {
       var next = Playlist.next();
       my_view.togglePlayer(next.title);
       my_view.displayThumbnail(next.video_id);
-      if (next_audio !== null && next_audio.src == MyAudio.getSrc()) {
-        do_next = true;
-      }
       MyAudio.play();
     },
     playPrevious :function() {
@@ -85,6 +80,7 @@ var NicoPlayer = function(){
 var NicoPlaylist = function(){
   var list;
   var index;
+  var is_shuffle = false;
   var getListLength = function() {
     var list_length = 0;
     for (var name in list) list_length++;
@@ -119,17 +115,25 @@ var NicoPlaylist = function(){
       return list[index];
     },
     shuffle :function() {
-      var length = getListLength();
-      while(length--) {
-        var rand = Math.floor(Math.random() * (length + 1));
-        if (length == rand) continue;
-        var save = list[length];
-        list[length] = list[rand];
-        list[rand] = save;
+      is_shuffle = ! is_shuffle;
+      if (! is_shuffle) {
+        this.getDefault();
+      } else {
+        var length = getListLength();
+        while(length--) {
+          var rand = Math.floor(Math.random() * (length + 1));
+          if (length == rand) continue;
+          var save = list[length];
+          list[length] = list[rand];
+          list[rand] = save;
+        }
       }
     },
     getDefault :function() {
       list = JSON.parse(document.player.playlist.value);
+    },
+    isShuffle :function() {
+      return is_shuffle;
     }
   };
 };
@@ -139,6 +143,15 @@ var NicoView = function() {
   var changeLocation = function(ref, animation, is_reverse) {
     $.mobile.defaultPageTransition = 'slide';
     $.mobile.changePage(ref, {transition: animation, reverse: is_reverse});
+  }
+  var removeChildrenById = function(elem_id) {
+    var elem = document.getElementById(elem_id);
+    //if (elem_id.hasChildNodes()) elem_id.removeChild(elem_id.firstChild);
+    if (elem.hasChildNodes()) {
+      while(elem.firstChild) {
+        elem.removeChild(elem.firstChild);
+      }
+    }
   }
   return {
     togglePlayer :function(title, reverse) {
@@ -150,13 +163,12 @@ var NicoView = function() {
         document.getElementById('pre_title').innerHTML = title;
         changeLocation("#pre", "slide", reverse);
       }
+      this.setShuffleSlider();
     },
     backToPlaylist :function() {
         changeLocation('#playlist', 'slide', true);
-        var post = document.getElementById('post_thumbnail_area');
-        var pre = document.getElementById('pre_thumbnail_area');
-        if (post.hasChildNodes()) post.removeChild(post.firstChild);
-        if (pre.hasChildNodes()) pre.removeChild(pre.firstChild);
+        removeChildrenById('post_thumbnail_area');
+        removeChildrenById('pre_thumbnail_area');
     },
     displayThumbnail :function(video_id) {
       var video_id = video_id.replace(/^sm/, '');
@@ -168,15 +180,30 @@ var NicoView = function() {
       if (location.href == domain + '#pre') {
         img.setAttribute('id', 'pre_thumbnail');
         document.getElementById('pre_thumbnail_area').appendChild(img);
-        var remove = document.getElementById('post_thumbnail_area');
+        removeChildrenById('post_thumbnail_area');
       } else {
         img.setAttribute('id', 'post_thumbnail');
         document.getElementById('post_thumbnail_area').appendChild(img);
-        var remove = document.getElementById('pre_thumbnail_area');
+        removeChildrenById('pre_thumbnail_area');
       }
-      if (remove.hasChildNodes()) remove.removeChild(remove.firstChild);
     },
     setShuffleSlider :function() {
+      var options = document.getElementsByTagName("option");
+      if (Playlist.isShuffle()) {
+        //on
+        options[1].setAttribute('selected', true);
+        options[3].setAttribute('selected', true);
+        //off
+        options[0].setAttribute('selected', false);
+        options[2].setAttribute('selected', false);
+      } else {
+        //on
+        options[1].setAttribute('selected', false);
+        options[3].setAttribute('selected', false);
+        //off
+        options[0].setAttribute('selected', true);
+        options[2].setAttribute('selected', true);
+      }
     }
   };
 }
