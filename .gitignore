@@ -3,3 +3,4 @@ audio/
 public/js/jquery-1.7.1.min.js
 index.html
 class/nicosecret.rb
+.htaccess

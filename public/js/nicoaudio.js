@@ -11,6 +11,13 @@ var NicoPlayer = function(){
     var date = nicoutil.parseDate(playing.ctime);
     return url + "public/audio/all/" + date + "/" + playing.video_id + ".mp3";
   };
+  var fileExists = function(src) {
+    return true;
+    //var req = new XMLHttpRequest();
+    //req.open('GET', src, false);
+    //req.send();
+    //return req.status == 200;
+  };
   return {
     init :function(index) {
       current_audio = new Audio("");
@@ -34,9 +41,14 @@ var NicoPlayer = function(){
       }
       var next_index = nicoutil.addStrings(Playlist.getIndex(), 1);
       var src = (getSrc(next_index)) ? getSrc(next_index) : getSrc(0);
-      next_audio = new Audio(src);
-      next_audio.autoplay = false;
-      next_audio.preload = 'auto';
+      try {
+        next_audio = new Audio(src);
+        next_audio.autoplay = false;
+        next_audio.preload = 'auto';
+      } catch (err) {
+        console.log(err.message);
+        return;
+      }
       //next_audio.onloadstart = console.log('next audio start loading');
       //next_audio.onloadeddata = console.log('next audio end loading:' + next_audio.src);
       do_next = false;
@@ -45,11 +57,11 @@ var NicoPlayer = function(){
       do_next = true;
       if (next_audio !== null && next_audio.src == getSrc()) {
         current_audio = next_audio;
-        next_audio = null;
+        next_audio = null;//kimoi
       } else {
         current_audio.src = getSrc();
       }
-      if (current_audio === null) {
+      if (current_audio === null || fileExists(current_audio.src) == false) {
         alert('audio is not foud');
         return;
       }
