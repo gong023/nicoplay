@@ -6,19 +6,23 @@
     %script{:type => 'text/javascript', :src => "/js/jquery-1.7.1.min.js"}
     %script{:type => 'text/javascript', :src => "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"}
     %script{:type => 'text/javascript', :src => "/js/nicoaudio.js"}
-  %body{:class => 'ui-mobile-viewport ui-overlay-c'}
+  %body{:class => 'ui-mobile-viewport'}
     %div{:'data-role' => 'page', :id => 'playlist'}
+      %div{:'data-role' => 'header', :'data-position' => 'fixed'}
+        %h1 #{@from_date} ~ #{@to_date}
       %div{:'data-role' => 'content'}
         %form{:name => 'player'}
           %input{:type => 'hidden', :name => 'playlist', :value => "#{@ranking.to_json}"}
-        %ul{:'data-role' => 'listview', :'data-inset' => 'true'}
+        %ul{:'data-role' => 'listview'}
           - @ranking.each do |i, rank|
             %li
               %a{:href => '#pre_player', :'data-transition' => 'slide', :onclick => |
               "MyAudio.init(\'#{i}\');"}= rank['title'] |
     %div{:'data-role' => 'page', :id => 'pre'}
+      %div{:'data-role' => 'header'}
+        %h1{:id => 'pre_title'}
       %center
-        %p{:id => 'pre_title'}
+        %br
         %div{:id => 'pre_thumbnail_area'}
       %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
@@ -32,8 +36,10 @@
         %option{:value => "on", :name => "pre_shuffle_on"}on
     -# preと行き来する
     %div{:'data-role' => 'page', :id => 'post'}
+      %div{:'data-role' => 'header'}
+        %h1{:id => 'post_title'}
       %center
-        %p{:id => 'post_title'}
+        %br
         %div{:id => 'post_thumbnail_area'}
       %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
       :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
