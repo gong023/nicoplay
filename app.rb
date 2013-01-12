@@ -11,8 +11,10 @@ class App < Sinatra::Base
   #set :port, 80
 
   get '/nicoplay/' do
-    @to_date   = Date::today
-    @from_date = @to_date - 7
+    # 裏で走るscriptと整合性をとる
+    # AM0:00 ~ 4:00は次の日の分とらない
+    @to_date = Time.now.strftime("%H") <= '04' ? Date::today - 1 : Date::today
+    @from_date = @to_date - 10
     @ranking = {}
     NicoRankingWWW.new.getRankingByinterval(@from_date, @to_date).to_a.reverse.each_with_index do |ret, i|
       #TODO:保存ディレクトリが一日遅れるバグ？暫定対処
