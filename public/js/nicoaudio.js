@@ -32,7 +32,7 @@ var NicoPlayer = function(){
       my_view.displayThumbnail(playing.video_id);
       this.play();
       if (prepare_timer == null) {
-        setInterval("MyAudio.prepareNext()", 4000);
+        //setInterval("MyAudio.prepareNext()", 4000);
       }
     },
     prepareNext :function() {
@@ -43,7 +43,7 @@ var NicoPlayer = function(){
       var src = (getSrc(next_index)) ? getSrc(next_index) : getSrc(0);
       try {
         next_audio = new Audio(src);
-        next_audio.autoplay = false;
+        next_audio.autoplay = true;
         next_audio.preload = 'auto';
       } catch (err) {
         console.log(err.message);
@@ -152,27 +152,36 @@ var NicoPlaylist = function(){
 var NicoView = function() {
   var domain = 'http://gong023.com:4567/nicoplay/';
   var thumbnail_domain = 'http://tn-skr1.smilevideo.jp/smile';
+  var scroll_msg = null;
   var changeLocation = function(ref, animation, is_reverse) {
     $.mobile.defaultPageTransition = 'slide';
     $.mobile.changePage(ref, {transition: animation, reverse: is_reverse});
   }
   var removeChildrenById = function(elem_id) {
     var elem = document.getElementById(elem_id);
-    //if (elem_id.hasChildNodes()) elem_id.removeChild(elem_id.firstChild);
     if (elem.hasChildNodes()) {
       while(elem.firstChild) {
         elem.removeChild(elem.firstChild);
       }
     }
   }
+  var scrollTitle = function(id) {
+    scroll_msg = scroll_msg.substring(1, scroll_msg.length) + scroll_msg.substring(0, 1);
+    document.getElementById(id).innerHTML = scroll_msg;
+    setTimeout(function(){scrollTitle(id);}, 300);
+  }
   return {
     togglePlayer :function(title, reverse) {
       var reverse = reverse || false;
       if (location.href == domain + '#pre') {
-        document.getElementById('post_title').innerHTML = title;
+        //document.getElementById('post_title').innerHTML = title;
+        scroll_msg = title + '           ';
+        setTimeout(scrollTitle('post_title'), 1000);
         changeLocation("#post", "slide", reverse);
       } else {
-        document.getElementById('pre_title').innerHTML = title;
+        //document.getElementById('pre_title').innerHTML = title;
+        scroll_msg = title + '           ';
+        setTimeout(scrollTitle('pre_title'), 1000);
         changeLocation("#pre", "slide", reverse);
       }
       this.setShuffleSlider();
@@ -181,6 +190,9 @@ var NicoView = function() {
         changeLocation('#playlist', 'slide', true);
         removeChildrenById('post_thumbnail_area');
         removeChildrenById('pre_thumbnail_area');
+        for (var i = 0; i < 100; i++) {
+          window.clearInterval(i);
+        }
     },
     displayThumbnail :function(video_id) {
       var video_id = video_id.replace(/^sm/, '');
