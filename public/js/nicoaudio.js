@@ -174,13 +174,11 @@ var NicoView = function() {
     togglePlayer :function(title, reverse) {
       var reverse = reverse || false;
       if (location.href == domain + '#pre') {
-        //document.getElementById('post_title').innerHTML = title;
-        scroll_msg = title + '           ';
+        scroll_msg = title + '　　　　　　';
         setTimeout(scrollTitle('post_title'), 1000);
         changeLocation("#post", "slide", reverse);
       } else {
-        //document.getElementById('pre_title').innerHTML = title;
-        scroll_msg = title + '           ';
+        scroll_msg = title + '　　　　　　';
         setTimeout(scrollTitle('pre_title'), 1000);
         changeLocation("#pre", "slide", reverse);
       }
