@@ -25,3 +25,5 @@ class App < Sinatra::Base
     haml :rank
   end
 end
+
+App::run!
