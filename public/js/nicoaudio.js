@@ -168,17 +168,20 @@ var NicoView = function() {
   var scrollTitle = function(id) {
     scroll_msg = scroll_msg.substring(1, scroll_msg.length) + scroll_msg.substring(0, 1);
     document.getElementById(id).innerHTML = scroll_msg;
-    setTimeout(function(){scrollTitle(id);}, 300);
+    setTimeout(function(){scrollTitle(id);}, 500);
   }
   return {
     togglePlayer :function(title, reverse) {
       var reverse = reverse || false;
+      var append = Math.round(title.length * 0.4);
+      scroll_msg = title;
+      for (var i = 0; i <= append; i ++ ) {
+        scroll_msg = scroll_msg + '　';
+      }
       if (location.href == domain + '#pre') {
-        scroll_msg = title + '　　　　　　';
         setTimeout(scrollTitle('post_title'), 1000);
         changeLocation("#post", "slide", reverse);
       } else {
-        scroll_msg = title + '　　　　　　';
         setTimeout(scrollTitle('pre_title'), 1000);
         changeLocation("#pre", "slide", reverse);
       }
