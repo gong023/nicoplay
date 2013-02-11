@@ -10,12 +10,10 @@ class Nicoplay < Sinatra::Base
     # 裏で走るscriptと整合性をとる
     # AM0:00 ~ 4:00は次の日の分とらない
     @to_date = Time.now.strftime("%H") <= '04' ? Date::today - 1 : Date::today
-    @from_date = @to_date - 10
+    @from_date = @to_date - 30
     @ranking = {}
     NicoRankingWWW.new.getRankingByinterval(@from_date, @to_date).to_a.reverse.each_with_index do |ret, i|
-      #TODO:保存ディレクトリが一日遅れるバグ？暫定対処
-      parsed = ret['ctime'].to_s.sub(/\ [0-9]+\:[0-9]+\:[0-9]+ \+[0-9]+$/,  '')
-      ret['ctime'] = (Date.strptime(parsed, '%Y-%m-%d') + 1).to_s
+      ret['ctime'] = ret['ctime'].to_s.sub(/\ [0-9]+\:[0-9]+\:[0-9]+ \+[0-9]+$/,  '')
       @ranking.store(i, ret)
     end
     haml :rank
