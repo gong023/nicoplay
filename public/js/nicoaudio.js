@@ -150,7 +150,7 @@ var NicoPlaylist = function(){
   };
 };
 var NicoView = function() {
-  var domain = 'http://gong023.com:4567/nicoplay/';
+  var domain = 'http://gong023.com:9292/nicoplay/';
   var thumbnail_domain = 'http://tn-skr1.smilevideo.jp/smile';
   var scroll_msg = null;
   var changeLocation = function(ref, animation, is_reverse) {
