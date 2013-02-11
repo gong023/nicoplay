@@ -1,16 +1,12 @@
 require 'sinatra/base'
-require 'sinatra/reloader'
 require 'haml'
 require "#{Dir::pwd}/class/nicoranking_www.rb"
 require 'json'
 
-class App < Sinatra::Base
-  register Sinatra::Reloader
-  set :server, "webrick"
+class Nicoplay < Sinatra::Base
   set :haml, :format => :html5
-  #set :port, 80
 
-  get '/nicoplay/' do
+  get '/' do
     # 裏で走るscriptと整合性をとる
     # AM0:00 ~ 4:00は次の日の分とらない
     @to_date = Time.now.strftime("%H") <= '04' ? Date::today - 1 : Date::today
@@ -25,5 +21,3 @@ class App < Sinatra::Base
     haml :rank
   end
 end
-
-App::run!

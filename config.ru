@@ -1,4 +1,4 @@
-require 'rubygems' unless defined? ::Gem
-require File.dirname( __FILE__ ) + '/app'
+require 'sinatra/base'
+require File.expand_path(File.dirname(__FILE__)) + '/app.rb'
 
-run Sinatra::Application
+run Nicoplay
