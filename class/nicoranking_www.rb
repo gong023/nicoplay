@@ -1,4 +1,4 @@
-require "#{Dir::pwd}/class/nicosecret.rb"
+require_relative "nicosecret.rb"
 require "#{SCRIPT_ROOT}/class/nicobase.rb"
 
 class NicoRankingWWW < NicoBase

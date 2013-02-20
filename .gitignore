@@ -1,5 +1,7 @@
-public/audio/all/
-audio/
+public/audio/
+public/css/font/
+public/css/images/
+public/css/jqm-icon-pack-3.0.0-fa.css
 public/js/jquery-1.7.1.min.js
 index.html
 class/nicosecret.rb

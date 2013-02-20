@@ -3,6 +3,7 @@
   %head
     %meta{:name => "viewport", :content => "width=device-width,initial-scale=1", :charset => "utf-8"}
     %link{:rel => "stylesheet", :href => "/css/jquery.mobile-1.1.0.css"}
+    %link{:rel => "stylesheet", :href => "/css/jqm-icon-pack-3.0.0-fa.css"}
     %script{:type => 'text/javascript', :src => "/js/jquery-1.7.1.min.js"}
     %script{:type => 'text/javascript', :src => "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"}
     %script{:type => 'text/javascript', :src => "/js/nicoaudio.js"}
@@ -24,12 +25,19 @@
       %center
         %br
         %div{:id => 'pre_thumbnail_area'}
-      %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
-      %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
-      %input{:type => 'button', :value => "previous", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
+        %table
+          %td
+            %input{:type => 'button', :'data-transition' => 'slide', |
+            :'data-icon' => 'step-backward', :'data-inline' => 'true', |
+            :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
+          %td
+            %input{:type => 'button', :'data-transition' => 'slide', |
+            :'data-icon' => 'stop', :'data-inline' => 'true', |
+            :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
+          %td
+            %input{:type => 'button', :'data-transition' => 'slide', |
+            :'data-icon' => 'step-forward', :'data-inline' => 'true', |
+            :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %label{:for => "shuffle_slider"}shuffle:
       %select{:'data-role' => 'slider', :onchange => "Playlist.shuffle();"}
         %option{:value => "off", :name => "pre_shuffle_off"}off
@@ -41,12 +49,19 @@
       %center
         %br
         %div{:id => 'post_thumbnail_area'}
-      %input{:type => 'button', :value => "next", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playNext();"}
-      %input{:type => 'button', :value => "stop", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
-      %input{:type => 'button', :value => "previous", :'data-transition' => 'slide', |
-      :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
+        %table
+          %td
+            %input{:type => 'button', :'data-transition' => 'slide', |
+            :'data-icon' => 'step-backward', :'data-inline' => 'true', |
+            :'data-direction' => 'reverse', :onclick => "MyAudio.pause();MyAudio.playPrevious();"}
+          %td
+            %input{:type => 'button', :'data-transition' => 'slide', |
+            :'data-icon' => 'stop', :'data-inline' => 'true', |
+            :'data-direction' => 'reverse', :onclick => "MyAudio.pause(true);"}
+          %td
+            %input{:type => 'button', :'data-transition' => 'slide', |
+            :'data-icon' => 'step-forward', :'data-inline' => 'true', |
+            :onclick => "MyAudio.pause();MyAudio.playNext();"}
       %label{:for => "shuffle_slider"}shuffle:
       %select{:'data-role' => 'slider', :onchange => "Playlist.shuffle();"}
         %option{:value => "off", :name => "post_shuffle_off"}off
