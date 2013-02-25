@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'haml'
@@ -20,4 +21,17 @@ class Nicoplay < Sinatra::Base
     end
     haml :rank
   end
+
+  get '/nicoplay/keyword' do
+    keyword = params[:w]
+    @ranking = {}
+    NicoRankingWWW.new.getRankingByKeyword(keyword).each_with_index do |ret, i|
+      ret['ctime'] = ret['ctime'].to_s.sub(/\ [0-9]+\:[0-9]+\:[0-9]+ \+[0-9]+$/,  '')
+      @ranking.store(i, ret)
+    end
+    @to_date = @ranking[0]['ctime']
+    @from_date = @ranking[@ranking.length-1]['ctime']
+    haml :rank
+  end
+
 end
