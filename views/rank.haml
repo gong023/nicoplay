@@ -15,10 +15,10 @@
         %form{:name => 'player'}
           %input{:type => 'hidden', :name => 'playlist', :value => "#{@ranking.to_json}"}
         %ul{:'data-role' => 'listview'}
-          - @ranking.each do |i, rank|
+          - @ranking.each_with_index do |rank, i|
             %li
-              %a{:href => '#pre_player', :'data-transition' => 'slide', :onclick => |
-              "MyAudio.init(\'#{i}\');"}= rank['title'] |
+              %a{:href => '#pre_player', :'data-transition' => 'slide', |
+              :onclick => "MyAudio.init(\'#{i}\');"}= rank['title']
     %div{:'data-role' => 'page', :id => 'pre'}
       %div{:'data-role' => 'header'}
         %h1{:id => 'pre_title'}
